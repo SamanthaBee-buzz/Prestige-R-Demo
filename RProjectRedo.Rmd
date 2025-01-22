@@ -48,6 +48,21 @@ vif(prmodel)
 ```
 Education and type have high collinearity values, but they can't be removed because the number of variables is so small. They can't be combined, because one is numerical and one is categorical.
 
+Finding and interpreting confidence intervals:
+```{r}
+confint(prmodel)[1,] 
+```
+I am 95% confident that for careers with 0 years of education, 0% women, and $0 income, the prestige will be between 0 and 9.77.
+For this interpretation, I cut it off at 0, because a negative prestige rating doesn't exist.
+
+```{r}
+confint(prmodel)[2,]
+confint(prmodel)[3,]
+confint(prmodel)[4,]
+```
+I am 95% confident that for every year of education, the prestige increases by between 2.38 and 4.95 points on average.
+I am 95% confident that for every dollar of income, the prestige increases by between .00052 and .0016 points on average.
+I am 95% confident that the slope of the relationship between the percent of women and prestige is between -.054 and .067 points on average.
 
 Model with all variable interactions:
 ```{r}
