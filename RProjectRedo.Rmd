@@ -13,7 +13,7 @@ library(car)
 library(ISLR)
 options(scipen=999)
 ```
-tes
+what
 The variables in this dataset are:
 education: Average years of education
 income: Average inome
