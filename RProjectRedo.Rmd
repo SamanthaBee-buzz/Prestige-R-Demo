@@ -29,7 +29,6 @@ Removing the "census" column, as it's just an ID number. Also removing the "NA" 
 ```{r}
 prestige=na.omit(prestige)
 prestigeclean=prestige[,-5]
-prestigeclean
 ```
 
 
