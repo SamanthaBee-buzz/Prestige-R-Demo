@@ -18,7 +18,7 @@ The variables in this dataset are:
 education: Average years of education
 income: Average inome
 women: Percent of women
-prestige" Pineo-Porter prestige score
+prestige: Pineo-Porter prestige score
 census: Canada Census occupational code
 type: The type of job. Blue collar, white collar, and professional are the types.
 ```{r}
