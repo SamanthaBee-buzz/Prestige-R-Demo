@@ -1,4 +1,2 @@
 "Prestige of Canadian Occupations" is the dataset I used. I found it here https://www.john-fox.ca/AppliedRegression/datasets/index.html (row 13). The dataset compiled the average years of education, average income, percent of women, occupational codes, and the type of occupation from volume 3, part 6 of the 1971 Canada census. It also included the Pineo-Porter prestige score for each occupation, which came from a 1960s survey.
 With this dataset, I will show my data modeling and analysis skills using Rstudio. I cleaned the dataset, created and interpreted linear models, detected collinearity, found and plotted significant variable interactions, found and removed outliers, and performed an anova test.
-
-Hi Professor Crow :D
