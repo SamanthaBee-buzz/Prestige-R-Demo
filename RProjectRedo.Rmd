@@ -46,22 +46,6 @@ vif(prmodel)
 ```
 Education and type have high collinearity values, but they can't be removed because the number of variables is so small. They can't be combined, because one is numerical and one is categorical.
 
-Finding and interpreting confidence intervals:
-```{r}
-confint(prmodel)[1,] 
-```
-I am 95% confident that for careers with 0 years of education, 0% women, and $0 income, the prestige will be between 0 and 9.77.
-For this interpretation, I cut it off at 0, because a negative prestige rating doesn't exist.
-
-```{r}
-confint(prmodel)[2,]
-confint(prmodel)[3,]
-confint(prmodel)[4,]
-```
-I am 95% confident that for every year of education, the prestige increases by between 2.38 and 4.95 points on average.
-I am 95% confident that for every dollar of income, the prestige increases by between .00052 and .0016 points on average.
-I am 95% confident that the slope of the relationship between the percent of women and prestige is between -.054 and .067 points on average.
-
 Model with all variable interactions:
 ```{r}
 prmodelint=lm(prestige~.^2,data=prestigeclean)
@@ -88,26 +72,126 @@ Equation for professional jobs: (-10.08+27.55*typeprof) + 2.8*education + (.0039
 Equation for white collar jobs: (-10.08+3.44*typewc) + 2.8*education + (.0039income-.0011*income:typewc) + .076*women = -6.64 + 2.8*education + .0028*income + .076*women
 Equation for blue collar jobs: -10.08 + 2.8*education + .0039*income + .076*women
 
-Let's compare models. I normally just do an anova test but thought I could show some more R experience. For reference, the original model is on top and the model with the interaction term is on the bottom.
+Performing an anova test between the model with and without the interaction term and interpreting the result:
+```{r}
+anova(prmodel, printmodel)
+```
+The model with the interaction term has more significance than the one without, which confirms what I found in the comparison.
+
+Finding outliers:
+```{r}
+plot(cooks.distance(printmodel))
+text(cooks.distance(printmodel))
+plot(hatvalues(printmodel))
+text(hatvalues(printmodel))
+```
+c: 2, 31, 50, 78
+
+Removing outliers:
+```{r}
+prestigeout=prestigeclean[-c(2,31,50,78),]
+```
+
+Creating and interpreting th linear model:
+```{r}
+proutmodel=lm(prestige~education+income+women+type+income:type,data=prestigeout)
+summary(proutmodel)
+```
+The equation for this model: prestige = -5.82 + 2.19*education + .004*income + .057*women + 31.12*typeprof + 5.64*typewc - .003*income:typeprof - .0011*income:typewc
+Education, income, typeprof, and income:typeprof significantly effect prestige.
+For every year of education, the career's prestige increases by 2.19 on average, holding all other variables constant. For every dollar of income, the prestige increases by .004 for blue collar jobs, .0029 for white collar jobs, and .001 for professional jobs.
+Additionally, the intercepts are -5.82, -.18, and 25.3 for blue collar, white collar, and professional jobs, respectively.
+Equation for professional jobs: (-5.82+31.12*typeprof) + 2.19*education + (.004*income-.003*income:typeprof) + .057*women = 25.3 + 2.19*education + .001*income + .057*women
+Equation for white collar jobs: (-5.82+5.64*typewc) + 2.19*education + (.004income-.0011*income:typewc) + .057*women = -.18 + 2.19*education + .0029*income + .057*women
+Equation for blue collar jobs: -5.82 + 2.19*education + .004*income + .057*women
+
+Let's compare models again. For reference, the model with the interaction term is on top and the model on the bottom has the interaction term and no outliers.
 
 Let's compare F-statistics first:
 ```{r}
-summary(prmodel)$fstatistic[1]
 summary(printmodel)$fstatistic[1]
+summary(proutmodel)$fstatistic[1]
 ```
-The F-statistic is high when at least 1 x variable significantly affects the y variable. Although it decreases a bit with the new model, it's still very high, so the difference there is negligible.
+The F-statistic is much higher with the new model, so it's even more likely at least 1 variable affects prestige.
 
 ```{r}
-summary(prmodel)$r.squared
 summary(printmodel)$r.squared
+summary(proutmodel)$r.squared
 ```
-R squared is the percent of variation in the y variable (prestige) that's explained by the x variables (education, income, women, and type). With the original model, 83.49% of the variance in prestige was explained by the other variables. With the interaction term, 87.46% of the variance is explained by the other variables, making it a better model in that regard.
+With the model with the outliers, 87.46% of the variance in prestige was explained by the other variables. Without them,  89.82% of the variance is explained by the other variables, making it a better model in that regard.
 
 ```{r}
-sigma(prmodel)
 sigma(printmodel)
+sigma(proutmodel)
 ```
-RSE (residual standard error) is how off the model is, on average. The original model was off by 7.13 on average, but the model with the interaction term was only off by 6.28, making it a better fit.
+The original model was off by 6.28 on average, but the model with the interaction term was only off by 5.69, making it a better fit.
+
+Scaling the numerical variables:
+```{r}
+prestigescaled=data.frame(scale(prestigeout[,1:4]))
+prestigescaled$type=prestigeout$type
+```
+
+With the model using the scaled data, I can see what variable affects prestige the most.
+```{r}
+prscmodel=lm(prestige~education+income+women+type+income:type,data=prestigescaled)
+summary(prscmodel)
+```
+Income has the strongest effect on prestige, because the absolute value of its estimate is the highest.
+
+
+
+
+
+
+
+
+
+```{r}
+prestige = read.csv("C:/Users/katek/OneDrive - University of South Florida/Desktop/NCF/Fall 2024/Linear models/Prestige.txt", sep="")
+prestige
+```
+
+Removing the "census" column, as it's just an ID number. Also removing the "NA" values.
+```{r}
+prestige=na.omit(prestige)
+prestigeclean=prestige[,-5]
+```
+
+
+Creating and interpreting a linear model:
+```{r}
+femmodel=lm(women~education+income+prestige+type,data=prestigeclean)
+summary(femmodel)
+```
+The equation for this model: women = 29.69 + 1.4*education - .0047*income + .076*prestige + 20.3*typeprof + 28.12*typewc
+~Education and income have a significant effect of prestige, since their P-values are less than .05. For every year of education, the career's prestige increases by 3.66 on average, holding all other variables constant. For every dollar of income, the career's prestige increases by .001 on average, holding all other variables constant.~
+
+Model with all variable interactions:
+```{r}
+prmodelint=lm(prestige~.^2,data=prestigeclean)
+summary(prmodelint)
+```
+Income:typeprof is a significant interaction, since its p-value is less than .05.
+
+Plotting the interaction:
+```{r}
+ggplot(prmodelint, aes(x=income, y=prestige, color=type)) + geom_smooth(method='lm')
+```
+The slope for the relationship between income ans prestige significantly changes when the measurements are taken from blue collar jobs.
+
+Creating and interpreting the model with the interaction term:
+```{r}
+printmodel=lm(prestige~education+income+women+type+income:type,data=prestigeclean)
+summary(printmodel)
+```
+The equation for this model: prestige = -10.08 + 2.8*education + .0039*income + .076*women + 27.55*typeprof + 3.44*typewc - .003*income:typeprof - .0011*income:typewc
+Education, income, women, typeprof, and income:typeprof significantly effect prestige.
+For every year of education, the career's prestige increases by 2.8 on average, holding all other variables constant. For every % of women in the profession, the career's prestige increases by .076 on average, holding all other variables constant. For every dollar of income, the prestige increases by .0039 for blue collar jobs, .0028 for white collar jobs, and .0009 for professional jobs.
+Additionally, the intercepts are -10.08, -6.64, and 17.47 for blue collar, white collar, and professional jobs, respectively.
+Equation for professional jobs: (-10.08+27.55*typeprof) + 2.8*education + (.0039*income-.003*income:typeprof) + .076*women = 17.47 + 2.8*education + .0009*income + .076*women
+Equation for white collar jobs: (-10.08+3.44*typewc) + 2.8*education + (.0039income-.0011*income:typewc) + .076*women = -6.64 + 2.8*education + .0028*income + .076*women
+Equation for blue collar jobs: -10.08 + 2.8*education + .0039*income + .076*women
 
 Performing an anova test between the model with and without the interaction term and interpreting the result:
 ```{r}
@@ -162,6 +246,22 @@ sigma(printmodel)
 sigma(proutmodel)
 ```
 The original model was off by 6.28 on average, but the model with the interaction term was only off by 5.69, making it a better fit.
+
+Finding and interpreting confidence intervals:
+```{r}
+confint(prmodel)[1,] 
+```
+I am 95% confident that for careers with 0 years of education, 0% women, and $0 income, the prestige will be between 0 and 9.77.
+For this interpretation, I cut it off at 0, because a negative prestige rating doesn't exist.
+
+```{r}
+confint(prmodel)[2,]
+confint(prmodel)[3,]
+confint(prmodel)[4,]
+```
+I am 95% confident that for every year of education, the prestige increases by between 2.38 and 4.95 points on average.
+I am 95% confident that for every dollar of income, the prestige increases by between .00052 and .0016 points on average.
+I am 95% confident that the slope of the relationship between the percent of women and prestige is between -.054 and .067 points on average.
 
 Scaling the numerical variables:
 ```{r}
