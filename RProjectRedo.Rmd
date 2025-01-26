@@ -105,13 +105,13 @@ The F-statistic is much higher with the new model, so it's even more likely at l
 summary(printmodel)$r.squared
 summary(proutmodel)$r.squared
 ```
-With the model with the outliers, 87.46% of the variance in prestige was explained by the other variables. Without them,  89.82% of the variance is explained by the other variables, making it a better model in that regard.
+For the model with the outliers, the R-squared was 87.46%, meaning of the variance in prestige was explained by the other variables. Without them,  89.82% of the variance is explained by the other variables, making it a better model in that regard.
 
 ```{r}
 sigma(printmodel)
 sigma(proutmodel)
 ```
-The original model was off by 6.28 on average, but the model with the interaction term was only off by 5.69, making it a better fit.
+The original model had an RSE (residual standars error) of 6.28, meaning the model's estimate of the prestige score was off by 6.28 on average. The model with the interaction term was only off by 5.69, making it a better fit.
 
 Finding and interpreting confidence intervals:
 ```{r}
