@@ -62,13 +62,6 @@ The slope for the relationship between income and prestige significantly changes
 ```{r}
 summary(printmodel)
 ```
-The equation for this model: prestige = -10.08 + 2.8*education + .0039*income + .076*women + 27.55*typeprof + 3.44*typewc - .003*income:typeprof - .0011*income:typewc
-Education, income, women, type, and income:type significantly effect prestige.
-For every year of education, the career's prestige increases by 2.8 on average, holding all other variables constant. For every % of women in the profession, the career's prestige increases by .076 on average, holding all other variables constant. For every dollar of income, the prestige increases by .0039 for blue collar jobs, .0028 for white collar jobs, and .0009 for professional jobs.
-Additionally, the intercepts are -10.08, -6.64, and 17.47 for blue collar, white collar, and professional jobs, respectively.
-Equation for professional jobs: (-10.08+27.55*typeprof) + 2.8*education + (.0039*income-.003*income:typeprof) + .076*women = 17.47 + 2.8*education + .0009*income + .076*women
-Equation for white collar jobs: (-10.08+3.44*typewc) + 2.8*education + (.0039income-.0011*income:typewc) + .076*women = -6.64 + 2.8*education + .0028*income + .076*women
-Equation for blue collar jobs: -10.08 + 2.8*education + .0039*income + .076*women
 
 Performing an anova test between the model with and without the interaction term and interpreting the result:
 ```{r}
