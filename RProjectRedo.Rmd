@@ -140,10 +140,11 @@ With the model using the scaled data, I can see what variable affects prestige t
 prscmodel=lm(prestige~education+income+women+type+income:type,data=prestigescaled)
 summary(prscmodel)
 ```
-Income has the strongest effect on prestige, because the absolute value of its estimate is the highest. Listing the variables from strongest significant effect to weakest significant effect on prestige gives us: income, income:typeprof, typeprof, then education. Surprisingly, education doesn't matter as much as the type of job or income when it comes to the prestige score.
 
 The equation for this model: prestige = -.021 + .36*education + .89*income + .1*women + .62*typeprof - .096*typewc - .67*income:typeprof - .24*income:typewc
+Income has the strongest effect on prestige, because the absolute value of its estimate is the highest. Listing the variables from strongest significant effect to weakest significant effect on prestige gives us: income, income:typeprof, typeprof, then education. Surprisingly, education doesn't matter as much as the type of job or income when it comes to the prestige score.
+
 Equation for professional jobs: .6 + .36*education + .22*income + .1*women
 Equation for white collar jobs: -.12 + .36*education + .65*income + .1*women
 Equation for blue collar jobs: -.021 + .36*education + .89*income + .1*women
-When writing the equations for each career type, it showed that income affects the prestige of blue collar jobs the most and professional jobs the least.
+I will define base prestige as the estimated prestige score when education, women, and income are 0. Blue collar jobs refer to jobs that involve manual labor, white collar jobs are office jobs, and professional jobs require specialized training. When writing the equations for each career type, it showed that blue collar jobs have the lowest base prestige while professional jobs have the highest. This implies that a professional job is seen as more prestigious even if all variables are the same as a blue collar job. Despite this, if all variables between a blue collar and professional job are the same, with enough income, the blue collar job will be more prestigous. This makes sense, as the variable that affects a blue collar job's prestige the most is income. The variable that affects a professional job's prestige the most is education, which is likely relted to the fact it requires specialized training.
