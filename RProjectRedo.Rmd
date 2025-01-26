@@ -33,7 +33,6 @@ prestige=na.omit(prestige)
 prestigeclean=prestige[,-5]
 ```
 
-
 Creating and interpreting a linear model:
 ```{r}
 prmodel=lm(prestige~education+income+women+type,data=prestigeclean)
