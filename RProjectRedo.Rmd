@@ -57,7 +57,7 @@ Plotting the interaction:
 ```{r}
 ggplot(printmodel, aes(x=income, y=prestige, color=type)) + geom_smooth(method='lm')
 ```
-The slope for the relationship between income ans prestige significantly changes when the measurements are taken from blue collar jobs.
+The slope for the relationship between income and prestige significantly changes when the measurements are taken from blue collar jobs.
 
 ```{r}
 summary(printmodel)
