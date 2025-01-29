@@ -11,6 +11,7 @@ library(ggplot2)
 library(ISwR)
 library(car)
 library(ISLR)
+library(here)
 options(scipen=999)
 ```
 
@@ -23,7 +24,7 @@ census: Canada Census occupational code
 type: The type of job. Blue collar, white collar, and professional are the types.
 
 ```{r}
-prestige = read.csv("C:/Users/katek/OneDrive - University of South Florida/Desktop/NCF/Fall 2024/Linear models/Prestige.txt", sep="")
+here("prestige", "Prestige.txt")
 ```
 
 Removing the "census" column, as it's just an ID number. Also removing the "NA" values.
