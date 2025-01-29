@@ -1,6 +1,6 @@
 ---
 title: "RProjectRedo"
-output: rmarkdown::github_document
+output: html_document
 date: "2025-01-17"
 ---
 
@@ -24,7 +24,6 @@ type: The type of job. Blue collar, white collar, and professional are the types
 
 ```{r}
 prestige = read.csv("C:/Users/katek/OneDrive - University of South Florida/Desktop/NCF/Fall 2024/Linear models/Prestige.txt", sep="")
-prestige
 ```
 
 Removing the "census" column, as it's just an ID number. Also removing the "NA" values.
