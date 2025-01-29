@@ -33,7 +33,6 @@ prestige=na.omit(prestige)
 prestigeclean=prestige[,-5]
 ```
 
-
 Creating and interpreting a linear model:
 ```{r}
 prmodel=lm(prestige~education+income+women+type,data=prestigeclean)
@@ -58,18 +57,11 @@ Plotting the interaction:
 ```{r}
 ggplot(printmodel, aes(x=income, y=prestige, color=type)) + geom_smooth(method='lm')
 ```
-The slope for the relationship between income ans prestige significantly changes when the measurements are taken from blue collar jobs.
+The slope for the relationship between income and prestige significantly changes when the measurements are taken from blue collar jobs.
 
 ```{r}
 summary(printmodel)
 ```
-The equation for this model: prestige = -10.08 + 2.8*education + .0039*income + .076*women + 27.55*typeprof + 3.44*typewc - .003*income:typeprof - .0011*income:typewc
-Education, income, women, type, and income:type significantly effect prestige.
-For every year of education, the career's prestige increases by 2.8 on average, holding all other variables constant. For every % of women in the profession, the career's prestige increases by .076 on average, holding all other variables constant. For every dollar of income, the prestige increases by .0039 for blue collar jobs, .0028 for white collar jobs, and .0009 for professional jobs.
-Additionally, the intercepts are -10.08, -6.64, and 17.47 for blue collar, white collar, and professional jobs, respectively.
-Equation for professional jobs: (-10.08+27.55*typeprof) + 2.8*education + (.0039*income-.003*income:typeprof) + .076*women = 17.47 + 2.8*education + .0009*income + .076*women
-Equation for white collar jobs: (-10.08+3.44*typewc) + 2.8*education + (.0039income-.0011*income:typewc) + .076*women = -6.64 + 2.8*education + .0028*income + .076*women
-Equation for blue collar jobs: -10.08 + 2.8*education + .0039*income + .076*women
 
 Performing an anova test between the model with and without the interaction term and interpreting the result:
 ```{r}
@@ -113,13 +105,13 @@ The F-statistic is much higher with the new model, so it's even more likely at l
 summary(printmodel)$r.squared
 summary(proutmodel)$r.squared
 ```
-With the model with the outliers, 87.46% of the variance in prestige was explained by the other variables. Without them,  89.82% of the variance is explained by the other variables, making it a better model in that regard.
+For the model with the outliers, the R-squared was 87.46%, meaning of the variance in prestige was explained by the other variables. Without them,  89.82% of the variance is explained by the other variables, making it a better model in that regard.
 
 ```{r}
 sigma(printmodel)
 sigma(proutmodel)
 ```
-The original model was off by 6.28 on average, but the model with the interaction term was only off by 5.69, making it a better fit.
+The original model had an RSE (residual standars error) of 6.28, meaning the model's estimate of the prestige score was off by 6.28 on average. The model with the interaction term was only off by 5.69, making it a better fit.
 
 Finding and interpreting confidence intervals:
 ```{r}
@@ -148,10 +140,11 @@ With the model using the scaled data, I can see what variable affects prestige t
 prscmodel=lm(prestige~education+income+women+type+income:type,data=prestigescaled)
 summary(prscmodel)
 ```
-Income has the strongest effect on prestige, because the absolute value of its estimate is the highest. Listing the variables from strongest significant effect to weakest significant effect on prestige gives us: income, income:typeprof, typeprof, then education. Surprisingly, education doesn't matter as much as the type of job or income when it comes to the prestige score.
 
 The equation for this model: prestige = -.021 + .36*education + .89*income + .1*women + .62*typeprof - .096*typewc - .67*income:typeprof - .24*income:typewc
+Income has the strongest effect on prestige, because the absolute value of its estimate is the highest. Listing the variables from strongest significant effect to weakest significant effect on prestige gives us: income, income:typeprof, typeprof, then education. Surprisingly, education doesn't matter as much as the type of job or income when it comes to the prestige score.
+
 Equation for professional jobs: .6 + .36*education + .22*income + .1*women
 Equation for white collar jobs: -.12 + .36*education + .65*income + .1*women
 Equation for blue collar jobs: -.021 + .36*education + .89*income + .1*women
-When writing the equations for each career type, it showed that income affects the prestige of blue collar jobs the most and professional jobs the least.
+I will define base prestige as the estimated prestige score when education, women, and income are 0. Blue collar jobs refer to jobs that involve manual labor, white collar jobs are office jobs, and professional jobs require specialized training. When writing the equations for each career type, it showed that blue collar jobs have the lowest base prestige while professional jobs have the highest. This implies that a professional job is seen as more prestigious even if all variables are the same as a blue collar job. Despite this, if all variables between a blue collar and professional job are the same, with enough income, the blue collar job will be more prestigous. This makes sense, as the variable that affects a blue collar job's prestige the most is income. The variable that affects a professional job's prestige the most is education, which is likely relted to the fact it requires specialized training.
